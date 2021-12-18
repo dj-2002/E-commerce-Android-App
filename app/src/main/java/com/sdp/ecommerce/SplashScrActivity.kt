@@ -43,7 +43,7 @@ class SplashScrActivity : AppCompatActivity() {
                         startActivity(
                             Intent(
                                 this@SplashScrActivity,
-                                RegistrationActivity::class.java
+                                MainActivity::class.java
                             )
                         )
                     }

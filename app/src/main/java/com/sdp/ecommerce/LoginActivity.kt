@@ -48,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
                     RegistrationActivity::class.java
                 )
             )
+            finish()
         })
         forgotPass?.setOnClickListener(View.OnClickListener {
             startActivity(
@@ -56,6 +57,7 @@ class LoginActivity : AppCompatActivity() {
                     PWresetActivity::class.java
                 )
             )
+            finish()
         })
     }
 
@@ -72,6 +74,7 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.makeText(this@LoginActivity, "Login Successful", Toast.LENGTH_SHORT)
                                     .show()
                                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                finish()
                             } else {
                                 progressDialog?.dismiss()
                                 Toast.makeText(

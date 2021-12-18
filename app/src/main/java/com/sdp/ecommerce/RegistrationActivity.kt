@@ -3,17 +3,24 @@ package com.sdp.ecommerce
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import android.widget.Toast
 
+
+
+
+private const val TAG = "RegistrationActivity"
 class RegistrationActivity : AppCompatActivity() {
     private lateinit var logo: ImageView
     private  lateinit var joinus: ImageView
@@ -68,6 +75,31 @@ class RegistrationActivity : AppCompatActivity() {
             ?.addOnCompleteListener(object : OnCompleteListener<AuthResult?> {
                 override fun onComplete(p0: Task<AuthResult?>) {
                     if (p0.isSuccessful()) {
+                        val fUser = firebaseAuth?.currentUser
+                        fUser?.sendEmailVerification()?.addOnCompleteListener(this@RegistrationActivity) {
+
+                            // Re-enable button
+//                                    findViewById<View>(R.id.verify_email_button).isEnabled = true
+                            if (it.isSuccessful) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Verification email sent to " + fUser!!.getEmail(),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Log.e(TAG, "sendEmailVerification", it.exception)
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Failed to send verification email.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+
+                        }
+
+
+
                         progressDialog.dismiss()
                         sendUserData(inputName, inputPw)
                         Toast.makeText(
@@ -75,7 +107,8 @@ class RegistrationActivity : AppCompatActivity() {
                             "You've been registered successfully.",
                             Toast.LENGTH_SHORT
                         ).show()
-                        startActivity(Intent(this@RegistrationActivity, MainActivity::class.java))
+                        startActivity(Intent(this@RegistrationActivity, LoginActivity::class.java))
+                        finish()
                     } else {
                         progressDialog.dismiss()
                         Toast.makeText(
@@ -88,6 +121,33 @@ class RegistrationActivity : AppCompatActivity() {
 
 
             })
+
+
+//        val actionCodeSettings =
+//            ActionCodeSettings.newBuilder()
+//                // URL you want to redirect back to. The domain (www.example.com) for this
+//                // URL must be whitelisted in the Firebase Console.
+//                .setUrl("https://www.example.com/finishSignUp?cartId=1234")
+//                // This must be true
+//                .setHandleCodeInApp(true)
+//                .setIOSBundleId("com.example.ios")
+//                .setAndroidPackageName(
+//                    "com.sdp.ecommerce",
+//                    true,  /* installIfNotAvailable */
+//                    "17" /* minimumVersion */
+//                )
+//                .build()
+//
+//
+//        FirebaseAuth.getInstance().sendSignInLinkToEmail(inputEmail, actionCodeSettings)
+//            .addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    Log.d(TAG, "Email sent.")
+//                }
+//            }
+
+
+
     }
 
     private fun sendUserData(username: String, password: String) {
@@ -113,3 +173,5 @@ class RegistrationActivity : AppCompatActivity() {
         return true
     }
 }
+
+
