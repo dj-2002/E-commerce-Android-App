@@ -13,7 +13,10 @@
         android:theme="@style/Theme.ShoppingApp">
         <activity
             android:name=".ProductDetailView"
-            android:exported="true" />
+            android:exported="true" >
+
+
+        </activity>
         <activity
             android:name=".TempActivity"
             android:exported="true"></activity>

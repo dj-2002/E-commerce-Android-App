@@ -19,8 +19,8 @@ import kotlinx.coroutines.runBlocking
 
 
 class ProductRepository(mcontext: Context) {
-    var db: FirebaseFirestore
-     var  context: Context = mcontext;
+        var db: FirebaseFirestore
+         var  context: Context = mcontext;
      var   list:MutableList<Product>  = arrayListOf()
 
      private  val TAG = "ProductRepository"
@@ -73,8 +73,8 @@ class ProductRepository(mcontext: Context) {
     {
 
             val db: CollectionReference = db.collection("products")
-           val job=  db.get().addOnCompleteListener {
-                var snapshot = it.result
+         val job=  db.get().addOnCompleteListener {
+                val snapshot = it.result
                 for (snapProduct in snapshot) {
                     val product = snapProduct.toObject(Product::class.java)
                     list.add(product)
@@ -83,6 +83,7 @@ class ProductRepository(mcontext: Context) {
 
         while(!job.isComplete)
         {
+            Log.e(TAG, "getProductList: running", )
             runBlocking {
                 delay(500)
             }
@@ -92,6 +93,11 @@ class ProductRepository(mcontext: Context) {
 
 
 
+    }
+
+    fun getSingleProduct(id:String) : Product
+    {
+       return list[0]
     }
 
 }

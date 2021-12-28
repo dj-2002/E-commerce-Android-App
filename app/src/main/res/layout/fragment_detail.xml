@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".DetailFragment">
     <include
         android:id="@+id/add_pro_app_bar"
         layout="@layout/layout_top_bar" />
@@ -125,17 +125,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pro_details_select_size_label">
 
-                <RadioGroup
-                    android:id="@+id/pro_details_sizes_radio_group"
-                    android:layout_width="wrap_content"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:id="@+id/pro_detail_linear_layout">
 
-                </RadioGroup>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:text="Varient 1"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                    </androidx.appcompat.widget.AppCompatButton>
+                </androidx.appcompat.widget.LinearLayoutCompat>
             </HorizontalScrollView>
 
             <TextView
@@ -215,4 +224,5 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:translationY="-8dp" />
-</RelativeLayout>
+
+</FrameLayout>
