@@ -14,4 +14,20 @@ data class Product  constructor(
 	var availableColors: List<String> = ArrayList(),
 	var images: MutableList<String> = ArrayList(),
 	var rating: Double = 0.0
-)
+) {
+    fun getHashMap(): HashMap<String, Any> {
+		return hashMapOf(
+			"productId" to productId,
+			"name" to name,
+			"owner" to owner,
+			"description" to description,
+			"category" to category,
+			"price" to price,
+			"mrp" to mrp,
+			"availableSizes" to availableSizes,
+			"availableColors" to availableColors,
+			"images" to images,
+			"rating" to rating
+		)
+    }
+}

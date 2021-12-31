@@ -3,97 +3,166 @@ package com.sdp.ecommerce.repository
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 import com.google.android.gms.tasks.OnFailureListener
 
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sdp.ecommerce.constant.Constant
 import com.sdp.ecommerce.models.Product
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import java.util.*
+import kotlin.collections.HashMap
 
-
-class ProductRepository(mcontext: Context) {
-        var db: FirebaseFirestore
-         var  context: Context = mcontext;
-     var   list:MutableList<Product>  = arrayListOf()
-
-     private  val TAG = "ProductRepository"
+private const val TAG = "ProductRepository"
+class ProductRepository(val context: Context) {
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val listOfProduct : LiveData<MutableList<Product>> = MutableLiveData(arrayListOf())
 
     init {
-        db = FirebaseFirestore.getInstance();
+        readProductList()
     }
 
-    fun addDataToFirestore(
-        productName: String,
-        productDescription: String,
-    ) {
-
-        val dbCourses: CollectionReference = db.collection("products")
-        val product = Product(name = productName, description = productDescription)
-
-        dbCourses.add(product)
-            .addOnSuccessListener(OnSuccessListener<Any?> { // after the data addition is successful
+    fun addNewProduct(product : Product){
+        // Add a new document with a generated ID
+        db.collection(Constant.DB_PRODUCT_COLLECTION)
+            .add(product)
+            .addOnSuccessListener { documentReference ->
+                Log.e(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                 Toast.makeText(context,
-                    "Your Course has been added to Firebase Firestore",
+                    "Your product has been successfully added to Firestore",
                     Toast.LENGTH_SHORT
                 ).show()
-            })
-            .addOnFailureListener(OnFailureListener { e ->
-                Toast.makeText(context, "Fail to add course \n$e", Toast.LENGTH_SHORT).show()
-            })
-
-
-         val productsDb = db.collection("products")
-         productsDb.addSnapshotListener { value, error ->
-
-             if(value!=null)
-             Log.e(TAG, "addDataToFirestore: ${value.documents[0].toString()}", )
-
-         }
-
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Error adding document", e)
+                Toast.makeText(context, "Fail to add product \n$e", Toast.LENGTH_SHORT).show()
+            }
     }
 
-    fun changeData(productName: String, productDescription: String, )
-    {
-        val dbCourses: CollectionReference = db.collection("products")
-        val product = Product(name = productName, description = productDescription)
-        val toChange = dbCourses.whereEqualTo("name","samsung m31").get().addOnCompleteListener {
-            val docId = it.result.documents[0].id
-            dbCourses.document(docId).set(product)
-        }
+    fun addNewProduct(productHashMap : HashMap<String,Any>){
+        // Add a new document with a generated ID
+        db.collection(Constant.DB_PRODUCT_COLLECTION)
+            .add(productHashMap)
+            .addOnSuccessListener { documentReference ->
+                Log.e(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                Toast.makeText(context,
+                    "Your product has been successfully added to Firestore",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Error adding document", e)
+                Toast.makeText(context, "Fail to add product \n$e", Toast.LENGTH_SHORT).show()
+            }
     }
 
-     fun getProductList()
-    {
 
-         val db: CollectionReference = db.collection("products")
-         val job=  db.get().addOnCompleteListener {
-                val snapshot = it.result
-                for (snapProduct in snapshot) {
-                    val product = snapProduct.toObject(Product::class.java)
-                    list.add(product)
+    fun readProductList(){
+
+        db.collection(Constant.DB_PRODUCT_COLLECTION)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.e(TAG, "${document.id} => ${document.data}")
+
+                    val product = document.toObject(Product::class.java)
+                    listOfProduct.value?.add(product)
                 }
             }
-
-        while(!job.isComplete)
-        {
-            Log.e(TAG, "getProductList: running", )
-            runBlocking {
-                delay(500)
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Error getting documents.", exception)
             }
+    }
 
+    fun getProductFromLocalList(productId: String):Product?{
+        if(listOfProduct.value==null) return null
+        for(product in listOfProduct.value!!){
+            if(product.productId == productId){
+                return product
+            }
         }
 
-
-
-
+        return null
     }
 
-    fun getSingleProduct(id:String) : Product
-    {
-       return list[0]
+
+    suspend fun getProduct(productDocumentId : String):Product?{
+
+        val docRef = db.collection(Constant.DB_PRODUCT_COLLECTION).document(productDocumentId)
+        var product : Product? = null
+        val job = docRef.get()
+            .addOnSuccessListener { document ->
+
+                if (document != null) {
+                    product= document.toObject(Product::class.java)
+                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
+
+        while(!job.isComplete){
+            delay(500)
+        }
+        return product
     }
+
+    fun updateProduct(productDocumentId: String,product: Product){
+
+        val docRef = db.collection(Constant.DB_PRODUCT_COLLECTION).document(productDocumentId)
+
+// Update the timestamp field with the value from the server
+//        val updates = hashMapOf<String, Any>(
+//            "timestamp" to FieldValue.serverTimestamp()
+//        )
+
+        val updates = product.getHashMap()
+
+        docRef.update(updates).addOnSuccessListener {
+            Log.e(TAG, "updateProduct: Updated successfully", )
+            Toast.makeText(context, "Updated successfully", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener{
+            Log.e(TAG, "updateProduct: error while updating!!", )
+            Toast.makeText(context, "Error while updating!!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun updateProduct(productDocumentId: String,updateHashMap: HashMap<String,Any>){
+        val docRef = db.collection(Constant.DB_PRODUCT_COLLECTION).document(productDocumentId)
+        docRef.update(updateHashMap).addOnSuccessListener {
+            Log.e(TAG, "updateProduct: Updated successfully", )
+            Toast.makeText(context, "Updated successfully", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener{
+            Log.e(TAG, "updateProduct: error while updating!!", )
+            Toast.makeText(context, "Error while updating!!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun deleteProduct(productDocumentId: String){
+
+        // Warning: Deleting a document does not delete its subcollections!
+
+        db.collection(Constant.DB_PRODUCT_COLLECTION).document(productDocumentId)
+            .delete()
+            .addOnSuccessListener { Log.e(TAG, "DocumentSnapshot successfully deleted!") }
+            .addOnFailureListener { e -> Log.e(TAG, "Error deleting document", e) }
+    }
+
+
+
+
+//    fun getSingleProduct(id:String) : Product
+//    {
+//       return list[0]
+//    }
 
 }
