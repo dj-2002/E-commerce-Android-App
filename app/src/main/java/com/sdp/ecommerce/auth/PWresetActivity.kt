@@ -1,13 +1,11 @@
-package com.sdp.ecommerce
+package com.sdp.ecommerce.auth
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import android.os.Bundle
-import com.sdp.ecommerce.R
-import com.google.android.gms.tasks.OnCompleteListener
 import android.content.Intent
 import android.widget.*
-import com.sdp.ecommerce.LoginActivity
+import com.sdp.ecommerce.R
 
 class PWresetActivity : AppCompatActivity() {
     private var ivLogo: ImageView? = null

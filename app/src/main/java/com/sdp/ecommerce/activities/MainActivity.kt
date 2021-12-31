@@ -1,14 +1,14 @@
-package com.sdp.ecommerce
+package com.sdp.ecommerce.activities
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.sdp.ecommerce.R
+import com.sdp.ecommerce.auth.LoginActivity
 
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {

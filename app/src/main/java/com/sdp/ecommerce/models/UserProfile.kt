@@ -1,4 +1,4 @@
-package com.sdp.ecommerce
+package com.sdp.ecommerce.models
 
 class UserProfile {
     var username: String? = null

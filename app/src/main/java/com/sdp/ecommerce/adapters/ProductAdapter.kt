@@ -1,17 +1,16 @@
-package com.sdp.ecommerce
+package com.sdp.ecommerce.adapters
 
 import android.content.Context
-import android.opengl.Visibility
-import android.text.style.TtsSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.view.menu.MenuView
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.sdp.ecommerce.R
+import com.sdp.ecommerce.models.Product
 
 class ProductAdapter( var context: Context, var list:MutableList<Product>) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {

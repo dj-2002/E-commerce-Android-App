@@ -18,10 +18,10 @@
 
         </activity>
         <activity
-            android:name=".TempActivity"
+            android:name=".activities.TempActivity"
             android:exported="true"></activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".activities.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,10 +34,10 @@
             android:exported="true" />
         <activity android:name=".RegistrationActivity" />
         <activity
-            android:name=".SplashScrActivity"
+            android:name=".activities.SplashScrActivity"
             android:exported="true" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".PWresetActivity" />
+        <activity android:name=".auth.LoginActivity" />
+        <activity android:name=".auth.PWresetActivity" />
     </application>
 
 </manifest>

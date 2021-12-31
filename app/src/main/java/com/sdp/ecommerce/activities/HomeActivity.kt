@@ -1,12 +1,8 @@
-package com.sdp.ecommerce
+package com.sdp.ecommerce.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.os.bundleOf
-import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.sdp.ecommerce.R
 
 class HomeActivity : AppCompatActivity() {
 

@@ -1,19 +1,15 @@
-package com.sdp.ecommerce
+package com.sdp.ecommerce.repository
 
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 
-import androidx.annotation.NonNull
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-
 import com.google.android.gms.tasks.OnFailureListener
 
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sdp.ecommerce.models.Product
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -72,7 +68,7 @@ class ProductRepository(mcontext: Context) {
      fun getProductList()
     {
 
-            val db: CollectionReference = db.collection("products")
+         val db: CollectionReference = db.collection("products")
          val job=  db.get().addOnCompleteListener {
                 val snapshot = it.result
                 for (snapProduct in snapshot) {

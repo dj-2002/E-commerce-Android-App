@@ -1,4 +1,4 @@
-package com.sdp.ecommerce
+package com.sdp.ecommerce.fragments
 
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -15,15 +15,19 @@ import android.widget.RadioButton
 import androidx.core.content.ContextCompat
 import androidx.core.view.setMargins
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.sdp.ecommerce.*
+import com.sdp.ecommerce.adapters.ProductImagesAdapter
 import com.sdp.ecommerce.databinding.FragmentDetailBinding
+import com.sdp.ecommerce.models.Product
+import com.sdp.ecommerce.repository.ProductRepository
+import com.sdp.ecommerce.utils.DotsIndicatorDecoration
 
 
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
-    private lateinit var  repo :ProductRepository
+    private lateinit var  repo : ProductRepository
     private lateinit var mProductList: MutableList<Product>
     private var productData : Product = Product()
     private var isSeller =false

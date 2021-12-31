@@ -1,4 +1,4 @@
-package com.sdp.ecommerce
+package com.sdp.ecommerce.utils
 
 import android.app.Activity
 import android.content.Context
@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sdp.ecommerce.activities.MainActivity
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
