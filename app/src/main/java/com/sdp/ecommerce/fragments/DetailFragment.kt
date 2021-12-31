@@ -39,8 +39,7 @@ class DetailFragment : Fragment() {
 
         binding = FragmentDetailBinding.inflate(layoutInflater)
         repo = ProductRepository(requireContext())
-        mProductList = repo.list
-        productData.name =
+        productData.name = ""
             "Tizum HDMI to VGA Adapter Cable 1080P for Projector, Computer, Laptop, TV, Projectors & TV"
         productData.mrp = 500.0
         productData.price = 259.0

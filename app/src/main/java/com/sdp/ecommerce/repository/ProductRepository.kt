@@ -62,6 +62,9 @@ class ProductRepository(val context: Context) {
             }
     }
 
+    fun getListOfProduct(): LiveData<MutableList<Product>> {
+        return listOfProduct
+    }
 
     fun readProductList(){
 
