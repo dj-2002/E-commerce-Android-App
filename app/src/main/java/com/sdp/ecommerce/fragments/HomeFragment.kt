@@ -1,6 +1,8 @@
 package com.sdp.ecommerce.fragments
 
+import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,23 +10,24 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp.ecommerce.HomeViewModel
+import com.sdp.ecommerce.HomeViewModelFactory
 import com.sdp.ecommerce.models.Product
 import com.sdp.ecommerce.adapters.ProductAdapter
 import com.sdp.ecommerce.repository.ProductRepository
 import com.sdp.ecommerce.R
 
-
+private const val TAG = "HomeFragment"
 class HomeFragment : Fragment() {
 
-    private  var mProductList: MutableList<Product> =  arrayListOf()
     lateinit var mRecyclerView: RecyclerView
     lateinit var mAdapter: ProductAdapter
     lateinit var mLayoutManager: RecyclerView.LayoutManager
-     val model: HomeViewModel by activityViewModels()
+    lateinit var  model: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,10 +37,14 @@ class HomeFragment : Fragment() {
         mRecyclerView = view.findViewById(R.id.products_recycler_view)
         mRecyclerView.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(context)
+        model = ViewModelProvider(requireActivity(), HomeViewModelFactory(requireContext())).get(
+            HomeViewModel::class.java
+        )
 
-        mAdapter = ProductAdapter(requireContext(), mProductList)
+        mAdapter = ProductAdapter(requireContext(), arrayListOf())
         model.getProductList().observe(viewLifecycleOwner , {
-            mProductList = it
+            Log.e(TAG, "onCreateView: list of product observer in homeFragment : ${it.size} $it", )
+            mAdapter.list = it
             mAdapter.notifyDataSetChanged()
 
         })
@@ -47,6 +54,7 @@ class HomeFragment : Fragment() {
         mRecyclerView.setAdapter(mAdapter)
         mAdapter.onClickListener = object : ProductAdapter.OnClickListener {
             override fun onClick(productData: Product) {
+                model.product = productData
                 view.findNavController().navigate(R.id.action_homeFragment_to_detailFragment)
             }
         }

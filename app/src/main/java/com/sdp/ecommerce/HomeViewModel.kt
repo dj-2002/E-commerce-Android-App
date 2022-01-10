@@ -1,24 +1,20 @@
 package com.sdp.ecommerce
 
 import android.app.Application
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import com.sdp.ecommerce.models.Product
 import com.sdp.ecommerce.repository.ProductRepository
 
-class HomeViewModel(application: Application,lifeCycleOwner : LifecycleOwner) : AndroidViewModel(application) {
+private const val TAG = "HomeViewModel"
+class HomeViewModel(context: Context) :ViewModel() {
 
-    val repository = ProductRepository(application.applicationContext)
-    var listOfProduct : MutableLiveData<MutableList<Product>> = MutableLiveData(arrayListOf())
-
-
-    init {
-        repository.getListOfProduct().observe(lifeCycleOwner,{
-            listOfProduct.value = it
-        })
-    }
+    val repository = ProductRepository(context)
+    var product : Product? = null
 
     fun getProductList(): LiveData<MutableList<Product>> {
-        return listOfProduct
+        return repository.getListOfProduct()
     }
 
 

@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.RadioButton
 import androidx.core.content.ContextCompat
 import androidx.core.view.setMargins
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.sdp.ecommerce.*
@@ -28,9 +29,39 @@ class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
     private lateinit var  repo : ProductRepository
-    private lateinit var mProductList: MutableList<Product>
     private var productData : Product = Product()
     private var isSeller =false
+    lateinit var model: HomeViewModel
+
+    fun setViews() {
+        binding.layoutViewsGroup.visibility = View.VISIBLE
+        binding.proDetailsAddCartBtn.visibility = View.VISIBLE
+        binding.addProAppBar.topAppBar.title = productData.name
+        binding.addProAppBar.topAppBar.setNavigationOnClickListener {
+            requireActivity().findNavController(R.id.fragmentContainerView).navigate(R.id.action_detailFragment_to_homeFragment)
+        }
+        // binding.addProAppBar.topAppBar.inflateMenu(R.menu.app_bar_menu)
+        binding.addProAppBar.topAppBar.overflowIcon?.setTint(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.gray
+            )
+        )
+
+        setImagesView()
+        binding.proDetailsTitleTv.text = productData.name ?: ""
+        binding.proDetailsLikeBtn.apply {
+        }
+        binding.proDetailsRatingBar.rating = (productData.rating ?: 0.0).toFloat()
+        binding.proDetailsPriceTv.text = resources.getString(
+            R.string.pro_details_price_value,
+            productData.price.toString()
+        )
+        setShoeSizeButtons()
+        setShoeColorsButtons()
+        binding.proDetailsSpecificsText.text = productData.description ?: ""
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,21 +70,28 @@ class DetailFragment : Fragment() {
 
         binding = FragmentDetailBinding.inflate(layoutInflater)
         repo = ProductRepository(requireContext())
-        productData.name = ""
-            "Tizum HDMI to VGA Adapter Cable 1080P for Projector, Computer, Laptop, TV, Projectors & TV"
-        productData.mrp = 500.0
-        productData.price = 259.0
-        productData.description =
-            "COMPACT DESIGN- The compact-made portable HDMI to VGA adapter connects a computer, desktop, laptop, or other devices with HDMI port to a monitor, projector, HDTV, or other devices with VGA port. Tuck this lightweight gadget into your bag or pocket to do a business presentation with your laptop and projector, or extend your desktop screen to a monitor or TV; A VGA cable is required. Does not Support Audio. SUPERIOR STABILITY- Built-in advanced Certified AG6200 IC chip converts HDMI digital signal to VGA analog signal it is NOT a bi-directional converter and cannot transmit signals from VGA to HDMI. INCREDIBLE PERFORMANCE- The HDMI male to VGA female converter supports resolutions up to 1920x1080 60Hz (1080p Full HD) including 720p, 1600x1200, 1280x1024 for high definition monitors. COMPATIBLE with computer, pc, desktop, laptop, or other devices with HDMI port Comes with 1 Year Warranty. For Support call + 91-7718-841-111 (Mon to Friday 9:30 am to 5:30pm)"
-        productData.availableColors = listOf("Blue", "Black")
-        productData.images = arrayListOf(
-            "https://m.media-amazon.com/images/I/61F4szMc-gL._SL1500_.jpg",
-            "https://m.media-amazon.com/images/I/71oBJ-DYRUL._SL1500_.jpg",
-            "https://m.media-amazon.com/images/I/71eRNg6id9L._SL1500_.jpg"
-        )
-        productData.rating = 4.2
-        productData.availableSizes = arrayListOf("4-64 GB", "6-64 GB", "6-128 GB")
 
+        model = ViewModelProvider(requireActivity(), HomeViewModelFactory(requireContext())).get(
+            HomeViewModel::class.java
+        )
+
+//        productData.name = ""
+//            "Tizum HDMI to VGA Adapter Cable 1080P for Projector, Computer, Laptop, TV, Projectors & TV"
+//        productData.mrp = 500.0
+//        productData.price = 259.0
+//        productData.description =
+//            "COMPACT DESIGN- The compact-made portable HDMI to VGA adapter connects a computer, desktop, laptop, or other devices with HDMI port to a monitor, projector, HDTV, or other devices with VGA port. Tuck this lightweight gadget into your bag or pocket to do a business presentation with your laptop and projector, or extend your desktop screen to a monitor or TV; A VGA cable is required. Does not Support Audio. SUPERIOR STABILITY- Built-in advanced Certified AG6200 IC chip converts HDMI digital signal to VGA analog signal it is NOT a bi-directional converter and cannot transmit signals from VGA to HDMI. INCREDIBLE PERFORMANCE- The HDMI male to VGA female converter supports resolutions up to 1920x1080 60Hz (1080p Full HD) including 720p, 1600x1200, 1280x1024 for high definition monitors. COMPATIBLE with computer, pc, desktop, laptop, or other devices with HDMI port Comes with 1 Year Warranty. For Support call + 91-7718-841-111 (Mon to Friday 9:30 am to 5:30pm)"
+//        productData.availableColors = listOf("Blue", "Black")
+//        productData.images = arrayListOf(
+//            "https://m.media-amazon.com/images/I/61F4szMc-gL._SL1500_.jpg",
+//            "https://m.media-amazon.com/images/I/71oBJ-DYRUL._SL1500_.jpg",
+//            "https://m.media-amazon.com/images/I/71eRNg6id9L._SL1500_.jpg"
+//        )
+//        productData.rating = 4.2
+//        productData.availableSizes = arrayListOf("4-64 GB", "6-64 GB", "6-128 GB")
+
+        if(model.product!=null)
+            productData = model.product!!
 
         if (isSeller) {
             binding.proDetailsAddCartBtn.visibility = View.GONE
@@ -61,45 +99,14 @@ class DetailFragment : Fragment() {
             binding.proDetailsAddCartBtn.visibility = View.VISIBLE
             binding.proDetailsAddCartBtn.setOnClickListener {
 
-
                 binding.layoutViewsGroup.visibility = View.GONE
                 binding.proDetailsAddCartBtn.visibility = View.GONE
             }
         }
-                setViews()
+        setViews()
 
-                return binding.root;
+        return binding.root;
     }
-
-
-    fun setViews() {
-                binding.layoutViewsGroup.visibility = View.VISIBLE
-                binding.proDetailsAddCartBtn.visibility = View.VISIBLE
-                binding.addProAppBar.topAppBar.title = productData.name
-                binding.addProAppBar.topAppBar.setNavigationOnClickListener {
-                    requireActivity().findNavController(R.id.fragmentContainerView).navigate(R.id.action_detailFragment_to_homeFragment)
-                }
-                // binding.addProAppBar.topAppBar.inflateMenu(R.menu.app_bar_menu)
-                binding.addProAppBar.topAppBar.overflowIcon?.setTint(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.gray
-                    )
-                )
-
-                setImagesView()
-                binding.proDetailsTitleTv.text = productData.name ?: ""
-                binding.proDetailsLikeBtn.apply {
-                }
-                binding.proDetailsRatingBar.rating = (productData.rating ?: 0.0).toFloat()
-                binding.proDetailsPriceTv.text = resources.getString(
-                    R.string.pro_details_price_value,
-                    productData.price.toString()
-                )
-                setShoeSizeButtons()
-                setShoeColorsButtons()
-                binding.proDetailsSpecificsText.text = productData.description ?: ""
-            }
 
     fun setImagesView() {
                 binding.proDetailsImagesRecyclerview.isNestedScrollingEnabled = false
@@ -224,6 +231,4 @@ class DetailFragment : Fragment() {
                     invalidate()
                 }
             }
-
-
         }

@@ -22,7 +22,7 @@ import kotlin.collections.HashMap
 private const val TAG = "ProductRepository"
 class ProductRepository(val context: Context) {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val listOfProduct : LiveData<MutableList<Product>> = MutableLiveData(arrayListOf())
+    private val listOfProduct : MutableLiveData<MutableList<Product>> = MutableLiveData(arrayListOf())
 
     init {
         readProductList()
@@ -68,6 +68,7 @@ class ProductRepository(val context: Context) {
 
     fun readProductList(){
 
+        val list : MutableList<Product> = arrayListOf()
         db.collection(Constant.DB_PRODUCT_COLLECTION)
             .get()
             .addOnSuccessListener { result ->
@@ -75,8 +76,9 @@ class ProductRepository(val context: Context) {
                     Log.e(TAG, "${document.id} => ${document.data}")
 
                     val product = document.toObject(Product::class.java)
-                    listOfProduct.value?.add(product)
+                    list.add(product)
                 }
+                listOfProduct.value = list
             }
             .addOnFailureListener { exception ->
                 Log.e(TAG, "Error getting documents.", exception)
