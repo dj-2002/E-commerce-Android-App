@@ -37,9 +37,7 @@ class DetailFragment : Fragment() {
         binding.layoutViewsGroup.visibility = View.VISIBLE
         binding.proDetailsAddCartBtn.visibility = View.VISIBLE
         binding.addProAppBar.topAppBar.title = productData.name
-        binding.addProAppBar.topAppBar.setNavigationOnClickListener {
-            requireActivity().findNavController(R.id.fragmentContainerView).navigate(R.id.action_detailFragment_to_homeFragment)
-        }
+
         // binding.addProAppBar.topAppBar.inflateMenu(R.menu.app_bar_menu)
         binding.addProAppBar.topAppBar.overflowIcon?.setTint(
             ContextCompat.getColor(

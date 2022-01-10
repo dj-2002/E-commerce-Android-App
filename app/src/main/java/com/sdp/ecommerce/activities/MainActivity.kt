@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.sdp.ecommerce.R
 import com.sdp.ecommerce.auth.LoginActivity
 
-private const val TAG = "MainActivity"
+const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
     private var btnLogout: Button? = null
     private lateinit var firebaseAuth: FirebaseAuth
