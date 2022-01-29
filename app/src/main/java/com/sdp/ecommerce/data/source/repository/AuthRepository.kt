@@ -14,6 +14,8 @@ import com.sdp.ecommerce.data.Result.Success
 import com.sdp.ecommerce.data.ShoppingAppSessionManager
 import com.sdp.ecommerce.data.UserData
 import com.sdp.ecommerce.data.source.UserDataSource
+import com.sdp.ecommerce.data.source.local.UserLocalDataSource
+import com.sdp.ecommerce.data.source.remote.AuthRemoteDataSource
 import com.sdp.ecommerce.data.utils.SignUpErrors
 import com.sdp.ecommerce.data.utils.UserType
 import kotlinx.coroutines.async
@@ -22,8 +24,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
 class AuthRepository(
-	private val userLocalDataSource: UserDataSource,
-	private val authRemoteDataSource: UserDataSource,
+	private val userLocalDataSource: UserLocalDataSource,
+	private val authRemoteDataSource: AuthRemoteDataSource,
 	private var sessionManager: ShoppingAppSessionManager
 ) : AuthRepoInterface {
 
@@ -38,7 +40,7 @@ class AuthRepository(
 	override fun isRememberMeOn() = sessionManager.isRememberMeOn()
 
 	override suspend fun refreshData() {
-		Log.d(TAG, "refreshing userdata")
+		Log.e(TAG, "refreshing userdata")
 		if (sessionManager.isLoggedIn()) {
 			updateUserInLocalSource(sessionManager.getPhoneNumber())
 		} else {
@@ -56,9 +58,9 @@ class AuthRepository(
 			false,
 			isSeller
 		)
-		Log.d(TAG, "on SignUp: Updating user in Local Source")
+		Log.e(TAG, "on SignUp: Updating user in Local Source")
 		userLocalDataSource.addUser(userData)
-		Log.d(TAG, "on SignUp: Updating userdata on Remote Source")
+		Log.e(TAG, "on SignUp: Updating userdata on Remote Source")
 		authRemoteDataSource.addUser(userData)
 		authRemoteDataSource.updateEmailsAndMobiles(userData.email, userData.mobile)
 	}
@@ -79,18 +81,18 @@ class AuthRepository(
 		mobile: String,
 		context: Context
 	): SignUpErrors? {
-		Log.d(TAG, "on SignUp: Checking email and mobile")
+		Log.e(TAG, "on SignUp: Checking email and mobile")
 		var sErr: SignUpErrors? = null
 		val queryResult = authRemoteDataSource.getEmailsAndMobiles()
 		if (queryResult != null) {
 			val mob = queryResult.mobiles.contains(mobile)
 			val em = queryResult.emails.contains(email)
 			if (!mob && !em) {
-				Log.d(TAG, "checkEmailAndMobile: error NONE")
+				Log.e(TAG, "checkEmailAndMobile: error NONE")
 				sErr = SignUpErrors.NONE
 			} else {
 				sErr = SignUpErrors.SERR
-				Log.d(TAG, "checkEmailAndMobile: error found")
+				Log.e(TAG, "checkEmailAndMobile: error found")
 				when {
 					!mob && em -> makeErrToast("Email is already registered!", context)
 					mob && !em -> makeErrToast("Mobile is already registered!", context)
@@ -98,12 +100,12 @@ class AuthRepository(
 				}
 			}
 		}
-		Log.d(TAG, "checkEmailAndMobile: ${sErr.toString()}")
+		Log.e(TAG, "checkEmailAndMobile: ${sErr.toString()}")
 		return sErr
 	}
 
 	override suspend fun checkLogin(mobile: String, password: String): UserData? {
-		Log.d(TAG, "on Login: checking mobile and password")
+		Log.e(TAG, "on Login: checking mobile and password")
 		val queryResult =
 			authRemoteDataSource.getUserByMobileAndPassword(mobile, password)
 		return if (queryResult.size > 0) {
@@ -120,7 +122,7 @@ class AuthRepository(
 		firebaseAuth.signInWithCredential(credential)
 			.addOnCompleteListener { task ->
 				if (task.isSuccessful) {
-					Log.d(TAG, "signInWithCredential:success")
+					Log.e(TAG, "signInWithCredential:success")
 					val user = task.result?.user
 					if (user != null) {
 						isUserLoggedIn.postValue(true)
@@ -129,7 +131,7 @@ class AuthRepository(
 				} else {
 					Log.w(TAG, "signInWithCredential:failure", task.exception)
 					if (task.exception is FirebaseAuthInvalidCredentialsException) {
-						Log.d(TAG, "createUserWithMobile:failure", task.exception)
+						Log.e(TAG, "createUserWithMobile:failure", task.exception)
 						isUserLoggedIn.postValue(false)
 						makeErrToast("Wrong OTP!", context)
 					}
@@ -183,11 +185,11 @@ class AuthRepository(
 	override suspend fun insertProductToLikes(productId: String, userId: String): Result<Boolean> {
 		return supervisorScope {
 			val remoteRes = async {
-				Log.d(TAG, "onLikeProduct: adding product to remote source")
+				Log.e(TAG, "onLikeProduct: adding product to remote source")
 				authRemoteDataSource.likeProduct(productId, userId)
 			}
 			val localRes = async {
-				Log.d(TAG, "onLikeProduct: updating product to local source")
+				Log.e(TAG, "onLikeProduct: updating product to local source")
 				userLocalDataSource.likeProduct(productId, userId)
 			}
 			try {
@@ -206,11 +208,11 @@ class AuthRepository(
 	): Result<Boolean> {
 		return supervisorScope {
 			val remoteRes = async {
-				Log.d(TAG, "onDislikeProduct: deleting product from remote source")
+				Log.e(TAG, "onDislikeProduct: deleting product from remote source")
 				authRemoteDataSource.dislikeProduct(productId, userId)
 			}
 			val localRes = async {
-				Log.d(TAG, "onDislikeProduct: updating product to local source")
+				Log.e(TAG, "onDislikeProduct: updating product to local source")
 				userLocalDataSource.dislikeProduct(productId, userId)
 			}
 			try {
@@ -229,11 +231,11 @@ class AuthRepository(
 	): Result<Boolean> {
 		return supervisorScope {
 			val remoteRes = async {
-				Log.d(TAG, "onInsertAddress: adding address to remote source")
+				Log.e(TAG, "onInsertAddress: adding address to remote source")
 				authRemoteDataSource.insertAddress(newAddress, userId)
 			}
 			val localRes = async {
-				Log.d(TAG, "onInsertAddress: updating address to local source")
+				Log.e(TAG, "onInsertAddress: updating address to local source")
 				val userRes = authRemoteDataSource.getUserById(userId)
 				if (userRes is Success) {
 					userLocalDataSource.clearUser()
@@ -258,11 +260,11 @@ class AuthRepository(
 	): Result<Boolean> {
 		return supervisorScope {
 			val remoteRes = async {
-				Log.d(TAG, "onUpdateAddress: updating address on remote source")
+				Log.e(TAG, "onUpdateAddress: updating address on remote source")
 				authRemoteDataSource.updateAddress(newAddress, userId)
 			}
 			val localRes = async {
-				Log.d(TAG, "onUpdateAddress: updating address on local source")
+				Log.e(TAG, "onUpdateAddress: updating address on local source")
 				val userRes =
 					authRemoteDataSource.getUserById(userId)
 				if (userRes is Success) {
@@ -285,11 +287,11 @@ class AuthRepository(
 	override suspend fun deleteAddressById(addressId: String, userId: String): Result<Boolean> {
 		return supervisorScope {
 			val remoteRes = async {
-				Log.d(TAG, "onDelete: deleting address from remote source")
+				Log.e(TAG, "onDelete: deleting address from remote source")
 				authRemoteDataSource.deleteAddress(addressId, userId)
 			}
 			val localRes = async {
-				Log.d(TAG, "onDelete: deleting address from local source")
+				Log.e(TAG, "onDelete: deleting address from local source")
 				val userRes =
 					authRemoteDataSource.getUserById(userId)
 				if (userRes is Success) {
@@ -315,11 +317,11 @@ class AuthRepository(
 	): Result<Boolean> {
 		return supervisorScope {
 			val remoteRes = async {
-				Log.d(TAG, "onInsertCartItem: adding item to remote source")
+				Log.e(TAG, "onInsertCartItem: adding item to remote source")
 				authRemoteDataSource.insertCartItem(cartItem, userId)
 			}
 			val localRes = async {
-				Log.d(TAG, "onInsertCartItem: updating item to local source")
+				Log.e(TAG, "onInsertCartItem: updating item to local source")
 				userLocalDataSource.insertCartItem(cartItem, userId)
 			}
 			try {
@@ -338,11 +340,11 @@ class AuthRepository(
 	): Result<Boolean> {
 		return supervisorScope {
 			val remoteRes = async {
-				Log.d(TAG, "onUpdateCartItem: updating cart item on remote source")
+				Log.e(TAG, "onUpdateCartItem: updating cart item on remote source")
 				authRemoteDataSource.updateCartItem(cartItem, userId)
 			}
 			val localRes = async {
-				Log.d(TAG, "onUpdateCartItem: updating cart item on local source")
+				Log.e(TAG, "onUpdateCartItem: updating cart item on local source")
 				userLocalDataSource.updateCartItem(cartItem, userId)
 			}
 			try {
@@ -358,11 +360,11 @@ class AuthRepository(
 	override suspend fun deleteCartItemByUserId(itemId: String, userId: String): Result<Boolean> {
 		return supervisorScope {
 			val remoteRes = async {
-				Log.d(TAG, "onDelete: deleting cart item from remote source")
+				Log.e(TAG, "onDelete: deleting cart item from remote source")
 				authRemoteDataSource.deleteCartItem(itemId, userId)
 			}
 			val localRes = async {
-				Log.d(TAG, "onDelete: deleting cart item from local source")
+				Log.e(TAG, "onDelete: deleting cart item from local source")
 				userLocalDataSource.deleteCartItem(itemId, userId)
 			}
 			try {
@@ -378,11 +380,11 @@ class AuthRepository(
 	override suspend fun placeOrder(newOrder: UserData.OrderItem, userId: String): Result<Boolean> {
 		return supervisorScope {
 			val remoteRes = async {
-				Log.d(TAG, "onPlaceOrder: adding item to remote source")
+				Log.e(TAG, "onPlaceOrder: adding item to remote source")
 				authRemoteDataSource.placeOrder(newOrder, userId)
 			}
 			val localRes = async {
-				Log.d(TAG, "onPlaceOrder: adding item to local source")
+				Log.e(TAG, "onPlaceOrder: adding item to local source")
 				val userRes = authRemoteDataSource.getUserById(userId)
 				if (userRes is Success) {
 					userLocalDataSource.clearUser()
@@ -408,11 +410,11 @@ class AuthRepository(
 	): Result<Boolean> {
 		return supervisorScope {
 			val remoteRes = async {
-				Log.d(TAG, "onSetStatus: updating status on remote source")
+				Log.e(TAG, "onSetStatus: updating status on remote source")
 				authRemoteDataSource.setStatusOfOrderByUserId(orderId, userId, status)
 			}
 			val localRes = async {
-				Log.d(TAG, "onSetStatus: updating status on local source")
+				Log.e(TAG, "onSetStatus: updating status on local source")
 				userLocalDataSource.setStatusOfOrderByUserId(orderId, userId, status)
 			}
 			try {

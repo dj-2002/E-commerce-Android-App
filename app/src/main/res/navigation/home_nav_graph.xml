@@ -15,7 +15,8 @@
             app:destination="@id/addEditProductFragment" />
         <action
             android:id="@+id/action_seeProduct"
-            app:destination="@id/productDetailsFragment" />
+            app:destination="@id/productDetailsFragment"
+            />
         <action
             android:id="@+id/action_homeFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
@@ -40,7 +41,7 @@
         <action
             android:id="@+id/action_addProductFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
+            app:popUpTo="@id/addEditProductFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -51,7 +52,7 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
+            app:popUpTo="@id/productDetailsFragment"
             app:popUpToInclusive="true" />
         <argument
             android:name="productId"

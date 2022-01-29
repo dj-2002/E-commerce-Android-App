@@ -40,7 +40,7 @@ abstract class LoginSignupBaseFragment<VBinding : ViewBinding> : Fragment() {
 	}
 
 	fun launchOtpActivity(from: String, extras: Bundle) {
-		Log.d(TAG, "launchOtpActivity: ")
+		Log.e(TAG, "launchOtpActivity: ")
 		val intent = Intent(context, OtpActivity::class.java).putExtra(
 			"from",
 			from

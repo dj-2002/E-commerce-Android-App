@@ -82,6 +82,7 @@ class LoginFragment : LoginSignupBaseFragment<FragmentLoginBinding>() {
 		binding.loginMobileEditText.error = mobError
 	}
 
+	// for signup button UI ELEMENT
 	private fun setUpClickableSignUpText() {
 		val signUpText = getString(R.string.login_signup_text)
 		val ss = SpannableString(signUpText)
@@ -98,10 +99,10 @@ class LoginFragment : LoginSignupBaseFragment<FragmentLoginBinding>() {
 		}
 	}
 
+	//passing data to viewmodel for login
 	private fun onLogin() {
 		val mob = binding.loginMobileEditText.text.toString()
 		val pwd = binding.loginPasswordEditText.text.toString()
-
 		viewModel.loginSubmitData(mob, pwd)
 	}
 }

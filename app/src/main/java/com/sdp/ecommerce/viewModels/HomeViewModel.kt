@@ -89,7 +89,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 	}
 
 	fun toggleLikeByProductId(productId: String) {
-		Log.d(TAG, "Toggling Like")
+		Log.e(TAG, "Toggling Like")
 		viewModelScope.launch {
 			val isLiked = isProductLiked(productId)
 			val allLikes = _userLikes.value?.toMutableList() ?: mutableListOf()
@@ -114,10 +114,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 					proList.remove(pro)
 				}
 				_likedProducts.value = proList
-				Log.d(TAG, "onToggleLike: Success")
+				Log.e(TAG, "onToggleLike: Success")
 			} else {
 				if (res is Error) {
-					Log.d(TAG, "onToggleLike: Error, ${res.exception}")
+					Log.e(TAG, "onToggleLike: Error, ${res.exception}")
 				}
 			}
 		}
@@ -143,7 +143,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 			_storeDataStatus.value = StoreDataStatus.LOADING
 			val res = async { productsRepository.refreshProducts() }
 			res.await()
-			Log.d(TAG, "getAllProducts: status = ${_storeDataStatus.value}")
+			Log.e(TAG, "getAllProducts: status = ${_storeDataStatus.value}")
 		}
 	}
 
@@ -157,11 +157,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 				} else {
 					_userLikes.value = emptyList()
 				}
-				Log.d(TAG, "Getting Likes: Success")
+				Log.e(TAG, "Getting Likes: Success")
 			} else {
 				_userLikes.value = emptyList()
 				if (res is Error)
-					Log.d(TAG, "Getting Likes: Error, ${res.exception}")
+					Log.e(TAG, "Getting Likes: Error, ${res.exception}")
 			}
 		}
 	}
@@ -220,11 +220,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 		getProducts()
 	}
 
+	// search bar
 	fun filterBySearch(queryText: String) {
 		filterProducts(_filterCategory.value!!)
 		_products.value = _products.value?.filter { product ->
 			product.name.contains(queryText, true) or
 					((queryText.toDoubleOrNull() ?: 0.0).compareTo(product.price) == 0)
+			// search for price also
 		}
 	}
 

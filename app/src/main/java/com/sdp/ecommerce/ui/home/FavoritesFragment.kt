@@ -48,7 +48,7 @@ class FavoritesFragment : Fragment() {
 			productsAdapter = LikedProductAdapter(proList, requireContext())
 			productsAdapter.onClickListener = object : LikedProductAdapter.OnClickListener {
 				override fun onClick(productData: Product) {
-					Log.d(TAG, "Product: ${productData.productId} clicked")
+					Log.e(TAG, "Product: ${productData.productId} clicked")
 					findNavController().navigate(
 						R.id.action_favoritesFragment_to_productDetailsFragment,
 						bundleOf("productId" to productData.productId)

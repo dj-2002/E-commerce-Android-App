@@ -21,11 +21,11 @@ import java.util.*
 
 private const val TAG = "ProductViewModel"
 
-class ProductViewModel(private val productId: String, application: Application) :
+class ProductViewModel( var productId: String, application: Application) :
 	AndroidViewModel(application) {
 
-	private val _productData = MutableLiveData<Product?>()
-	val productData: LiveData<Product?> get() = _productData
+	private var _productData = MutableLiveData<Product?>()
+	val productData: LiveData<Product?>  get() = _productData
 
 	private val _dataStatus = MutableLiveData<StoreDataStatus>()
 	val dataStatus: LiveData<StoreDataStatus> get() = _dataStatus
@@ -51,15 +51,16 @@ class ProductViewModel(private val productId: String, application: Application) 
 		_isLiked.value = false
 		_errorStatus.value = emptyList()
 		viewModelScope.launch {
-			Log.d(TAG, "init: productId: $productId")
-			getProductDetails()
+			Log.e(TAG, "init: productId: $productId")
+			//getProductDetails()
 			checkIfInCart()
 			setLike()
 		}
 
 	}
 
-	private fun getProductDetails() {
+	 fun getProductDetails() {
+		
 		viewModelScope.launch {
 			_dataStatus.value = StoreDataStatus.LOADING
 			try {
@@ -76,6 +77,7 @@ class ProductViewModel(private val productId: String, application: Application) 
 				_dataStatus.value = StoreDataStatus.ERROR
 			}
 		}
+		Log.e(TAG, "getProductDetails: finding product from id", )
 	}
 
 	fun setLike() {
@@ -165,5 +167,9 @@ class ProductViewModel(private val productId: String, application: Application) 
 				}
 			}
 		}
+	}
+
+	fun destroyOldData() {
+
 	}
 }

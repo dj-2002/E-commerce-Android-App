@@ -88,7 +88,7 @@ class OrderDetailsFragment : Fragment() {
 	}
 
 	private fun setAllViews(orderData: UserData.OrderItem) {
-		Log.d("OrderDetail", "set all views called")
+		Log.e("OrderDetail", "set all views called")
 		if (viewModel.isUserASeller) {
 			binding.orderChangeStatusBtn.visibility = View.VISIBLE
 			binding.orderChangeStatusBtn.setOnClickListener {

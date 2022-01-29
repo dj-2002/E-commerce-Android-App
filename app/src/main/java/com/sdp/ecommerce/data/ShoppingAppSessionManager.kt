@@ -2,7 +2,9 @@ package com.sdp.ecommerce.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 
+private const val TAG = "ShoppingAppSessionManag"
 class ShoppingAppSessionManager(context: Context) {
 
 	var userSession: SharedPreferences =
@@ -25,11 +27,12 @@ class ShoppingAppSessionManager(context: Context) {
 		editor.putBoolean(KEY_IS_SELLER, isSeller)
 
 		editor.commit()
+		Log.e(TAG, "createLoginSession: saving user to local")
 	}
 
 	fun isUserSeller(): Boolean = userSession.getBoolean(KEY_IS_SELLER, false)
 
-	fun isRememberMeOn(): Boolean = userSession.getBoolean(KEY_REMEMBER_ME, true)
+	fun isRememberMeOn(): Boolean = userSession.getBoolean(KEY_REMEMBER_ME, false)
 
 	fun getPhoneNumber(): String? = userSession.getString(KEY_MOBILE, null)
 
@@ -41,12 +44,18 @@ class ShoppingAppSessionManager(context: Context) {
 		)
 	}
 
-	fun getUserIdFromSession(): String? = userSession.getString(KEY_ID, "0")
+	fun getUserIdFromSession(): String? = userSession.getString(KEY_ID, "-1")
 
 	fun isLoggedIn(): Boolean = userSession.getBoolean(IS_LOGIN, false)
 
 	fun logoutFromSession() {
 		editor.clear()
+		editor.commit()
+	}
+
+	fun changeUserMode()
+	{
+		editor.putBoolean(KEY_IS_SELLER, !isUserSeller())
 		editor.commit()
 	}
 

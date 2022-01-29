@@ -60,7 +60,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 		isAccepted: Boolean,
 		isSeller: Boolean
 	) {
-		Log.d(TAG, "signUpSubmitData: ")
+		Log.e(TAG, "signUpSubmitData: ")
 		if (name.isBlank() || mobile.isBlank() || email.isBlank() || pwd1.isBlank() || pwd2.isBlank()) {
 			_errorStatus.value = SignUpViewErrors.ERR_EMPTY
 		} else {
@@ -141,7 +141,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 	}
 
 	private suspend fun getCurrUser() {
-		Log.d(TAG, "refreshing data...")
+		Log.e(TAG, "refreshing data...")
 		authRepository.refreshData()
 	}
 }

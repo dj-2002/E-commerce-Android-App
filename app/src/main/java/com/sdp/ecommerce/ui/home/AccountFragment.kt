@@ -11,7 +11,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sdp.ecommerce.R
+import com.sdp.ecommerce.data.ShoppingAppSessionManager
 import com.sdp.ecommerce.databinding.FragmentAccountBinding
+import com.sdp.ecommerce.ui.launchHome
 import com.sdp.ecommerce.ui.loginSignup.LoginSignupActivity
 import com.sdp.ecommerce.viewModels.HomeViewModel
 
@@ -35,20 +37,27 @@ class AccountFragment : Fragment() {
 
 	private fun setViews() {
 		binding.accountTopAppBar.topAppBar.title = getString(R.string.account_fragment_title)
+		binding.sellerModeSwitch.isChecked=viewModel.isUserASeller
+		binding.sellerModeSwitch.setOnClickListener({
+			val sessionManager = ShoppingAppSessionManager(requireContext())
+			sessionManager.changeUserMode()
+			launchHome(requireContext())
+
+		})
 		binding.accountProfileTv.setOnClickListener {
-			Log.d(TAG, "Profile Selected")
+			Log.e(TAG, "Profile Selected")
 			findNavController().navigate(R.id.action_accountFragment_to_profileFragment)
 		}
 		binding.accountOrdersTv.setOnClickListener {
-			Log.d(TAG, "Orders Selected")
+			Log.e(TAG, "Orders Selected")
 			findNavController().navigate(R.id.action_accountFragment_to_ordersFragment)
 		}
 		binding.accountAddressTv.setOnClickListener {
-			Log.d(TAG, "Address Selected")
+			Log.e(TAG, "Address Selected")
 			findNavController().navigate(R.id.action_accountFragment_to_addressFragment)
 		}
 		binding.accountSignOutTv.setOnClickListener {
-			Log.d(TAG, "Sign Out Selected")
+			Log.e(TAG, "Sign Out Selected")
 			showSignOutDialog()
 		}
 	}

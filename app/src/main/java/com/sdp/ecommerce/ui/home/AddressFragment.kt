@@ -52,12 +52,12 @@ class AddressFragment : Fragment() {
 			addressAdapter = AddressAdapter(requireContext(), addressList, false)
 			addressAdapter.onClickListener = object : AddressAdapter.OnClickListener {
 				override fun onEditClick(addressId: String) {
-					Log.d(TAG, "onEditAddress: initiated")
+					Log.e(TAG, "onEditAddress: initiated")
 					navigateToAddEditAddress(true, addressId)
 				}
 
 				override fun onDeleteClick(addressId: String) {
-					Log.d(TAG, "onDeleteAddress: initiated")
+					Log.e(TAG, "onDeleteAddress: initiated")
 					showDeleteDialog(addressId)
 				}
 			}

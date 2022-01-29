@@ -32,10 +32,10 @@ class ProductsRemoteDataSource : ProductDataSource {
 	}
 
 	override suspend fun getAllProducts(): Result<List<Product>> {
-		Log.d(TAG, "getAllProducts: ")
+		Log.e(TAG, "getAllProducts: ")
 		val resRef = productsCollectionRef().get().await()
 		return if (!resRef.isEmpty) {
-			Log.d(TAG, "getAllProducts: ${resRef.toString()}")
+			Log.e(TAG, "getAllProducts: ${resRef.toString()}")
 			Success(resRef.toObjects(Product::class.java))
 		} else {
 			Error(Exception("Error getting Products!"))
@@ -53,7 +53,7 @@ class ProductsRemoteDataSource : ProductDataSource {
 			val docId = resRef.documents[0].id
 			productsCollectionRef().document(docId).set(proData.toHashMap()).await()
 		} else {
-			Log.d(TAG, "onUpdateProduct: product with id: $proData.productId not found!")
+			Log.e(TAG, "onUpdateProduct: product with id: $proData.productId not found!")
 		}
 	}
 
@@ -67,7 +67,7 @@ class ProductsRemoteDataSource : ProductDataSource {
 	}
 
 	override suspend fun deleteProduct(productId: String) {
-		Log.d(TAG, "onDeleteProduct: delete product with Id: $productId initiated")
+		Log.e(TAG, "onDeleteProduct: delete product with Id: $productId initiated")
 		val resRef = productsCollectionRef().whereEqualTo(PRODUCT_ID_FIELD, productId).get().await()
 		if (!resRef.isEmpty) {
 			val product = resRef.documents[0].toObject(Product::class.java)
@@ -81,12 +81,12 @@ class ProductsRemoteDataSource : ProductDataSource {
 			//deleting doc containing product
 			val docId = resRef.documents[0].id
 			productsCollectionRef().document(docId).delete().addOnSuccessListener {
-				Log.d(TAG, "onDelete: DocumentSnapshot successfully deleted!")
+				Log.e(TAG, "onDelete: DocumentSnapshot successfully deleted!")
 			}.addOnFailureListener { e ->
 				Log.w(TAG, "onDelete: Error deleting document", e)
 			}
 		} else {
-			Log.d(TAG, "onDeleteProduct: product with id: $productId not found!")
+			Log.e(TAG, "onDeleteProduct: product with id: $productId not found!")
 		}
 	}
 
@@ -105,18 +105,18 @@ class ProductsRemoteDataSource : ProductDataSource {
 	override fun deleteImage(imgUrl: String) {
 		val ref = firebaseStorage.getReferenceFromUrl(imgUrl)
 		ref.delete().addOnSuccessListener {
-			Log.d(TAG, "onDelete: image deleted successfully!")
+			Log.e(TAG, "onDelete: image deleted successfully!")
 		}.addOnFailureListener { e ->
-			Log.d(TAG, "onDelete: Error deleting image, error: $e")
+			Log.e(TAG, "onDelete: Error deleting image, error: $e")
 		}
 	}
 
 	override fun revertUpload(fileName: String) {
 		val imgRef = storageRef().child("${SHOES_STORAGE_PATH}/$fileName")
 		imgRef.delete().addOnSuccessListener {
-			Log.d(TAG, "onRevert: File with name: $fileName deleted successfully!")
+			Log.e(TAG, "onRevert: File with name: $fileName deleted successfully!")
 		}.addOnFailureListener { e ->
-			Log.d(TAG, "onRevert: Error deleting file with name = $fileName, error: $e")
+			Log.e(TAG, "onRevert: Error deleting file with name = $fileName, error: $e")
 		}
 	}
 

@@ -51,7 +51,7 @@ class OrdersFragment : Fragment() {
 			ordersAdapter = OrdersAdapter(emptyList(), requireContext())
 			ordersAdapter.onClickListener = object : OrdersAdapter.OnClickListener {
 				override fun onCardClick(orderId: String) {
-					Log.d(TAG, "onOrderSummaryClick: Getting order details")
+					Log.e(TAG, "onOrderSummaryClick: Getting order details")
 					findNavController().navigate(
 						R.id.action_ordersFragment_to_orderDetailsFragment,
 						bundleOf("orderId" to orderId)

@@ -73,7 +73,7 @@ class PayByAdapter(private val data: List<String>) :
 			lastCheckedCard = cardView
 			lastCheckedMethod = method
 			selectedMethodPos = position
-			Log.d(TAG, "onSelectMethod: Selected Method = $lastCheckedMethod")
+			Log.e(TAG, "onSelectMethod: Selected Method = $lastCheckedMethod")
 		}
 	}
 }

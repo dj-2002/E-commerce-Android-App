@@ -37,6 +37,7 @@ class OtpActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		binding = ActivityOtpBinding.inflate(layoutInflater)
+		//using bundle to get udata
 		val uData: UserData? = intent.getParcelableExtra("uData")
 		fromWhere = intent.getStringExtra("from").toString()
 		if (uData != null) {
@@ -52,6 +53,7 @@ class OtpActivity : AppCompatActivity() {
 		setContentView(binding.root)
 	}
 
+	//UI TRANSICATION for OTP verification error
 	private fun setObservers() {
 		viewModel.otpStatus.observe(this) {
 			when (it) {

@@ -134,22 +134,22 @@ class CartFragment : Fragment() {
 		itemsAdapter = CartItemAdapter(requireContext(), items, proList, likesList)
 		itemsAdapter.onClickListener = object : CartItemAdapter.OnClickListener {
 			override fun onLikeClick(productId: String) {
-				Log.d(TAG, "onToggle Like Clicked")
+				Log.e(TAG, "onToggle Like Clicked")
 				orderViewModel.toggleLikeProduct(productId)
 			}
 
 			override fun onDeleteClick(itemId: String, itemBinding: LayoutCircularLoaderBinding) {
-				Log.d(TAG, "onDelete: initiated")
+				Log.e(TAG, "onDelete: initiated")
 				showDeleteDialog(itemId, itemBinding)
 			}
 
 			override fun onPlusClick(itemId: String) {
-				Log.d(TAG, "onPlus: Increasing quantity")
+				Log.e(TAG, "onPlus: Increasing quantity")
 				orderViewModel.setQuantityOfItem(itemId, 1)
 			}
 
 			override fun onMinusClick(itemId: String, currQuantity: Int,itemBinding: LayoutCircularLoaderBinding) {
-				Log.d(TAG, "onMinus: decreasing quantity")
+				Log.e(TAG, "onMinus: decreasing quantity")
 				if (currQuantity == 1) {
 					showDeleteDialog(itemId, itemBinding)
 				} else {

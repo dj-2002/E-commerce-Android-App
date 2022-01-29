@@ -26,6 +26,7 @@ class SignupFragment : LoginSignupBaseFragment<FragmentSignupBinding>() {
 		super.observeView()
 		viewModel.errorStatus.observe(viewLifecycleOwner) { err ->
 			modifyErrors(err)
+			// to display error message on screen
 		}
 	}
 
@@ -75,6 +76,7 @@ class SignupFragment : LoginSignupBaseFragment<FragmentSignupBinding>() {
 		}
 	}
 
+	// saving signup data to viewmodel when signup button clicked
 	private fun onSignUp() {
 		val name = binding.signupNameEditText.text.toString()
 		val mobile = binding.signupMobileEditText.text.toString()

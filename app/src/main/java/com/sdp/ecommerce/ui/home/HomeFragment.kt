@@ -190,7 +190,9 @@ class HomeFragment : Fragment() {
 				}
 			}
 		}
+		//search bar
 		binding.homeTopAppBar.homeSearchEditText.setOnEditorActionListener { textView, actionId, _ ->
+			// if search clicked hide keyboard and do search
 			if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 				textView.clearFocus()
 				val inputManager =
@@ -202,6 +204,8 @@ class HomeFragment : Fragment() {
 				false
 			}
 		}
+
+		// close button click - hide keyboard
 		binding.homeTopAppBar.searchOutlinedTextLayout.setEndIconOnClickListener {
 			it.clearFocus()
 			binding.homeTopAppBar.homeSearchEditText.setText("")
@@ -220,29 +224,32 @@ class HomeFragment : Fragment() {
 		productAdapter = ProductAdapter(productsList ?: emptyList(), likesList, requireContext())
 		productAdapter.onClickListener = object : ProductAdapter.OnClickListener {
 			override fun onClick(productData: Product) {
+				Log.e(TAG, "onClick: navigate to detail fragment ${productData.name}", )
 				findNavController().navigate(
 					R.id.action_seeProduct,
 					bundleOf("productId" to productData.productId)
 				)
+				//findNavController().navigate()
+
 			}
 
 			override fun onDeleteClick(productData: Product) {
-				Log.d(TAG, "onDeleteProduct: initiated for ${productData.productId}")
+				Log.e(TAG, "onDeleteProduct: initiated for ${productData.productId}")
 				showDeleteDialog(productData.name, productData.productId)
 			}
 
 			override fun onEditClick(productId: String) {
-				Log.d(TAG, "onEditProduct: initiated for $productId")
+				Log.e(TAG, "onEditProduct: initiated for $productId")
 				navigateToAddEditProductFragment(isEdit = true, productId = productId)
 			}
 
 			override fun onLikeClick(productId: String) {
-				Log.d(TAG, "onToggleLike: initiated for $productId")
+				Log.e(TAG, "onToggleLike: initiated for $productId")
 				viewModel.toggleLikeByProductId(productId)
 			}
 
 			override fun onAddToCartClick(productData: Product) {
-				Log.d(TAG, "onToggleCartAddition: initiated")
+				Log.e(TAG, "onToggleCartAddition: initiated")
 				viewModel.toggleProductInCart(productData)
 			}
 		}
@@ -326,7 +333,8 @@ class HomeFragment : Fragment() {
 
 	private fun getMixedDataList(data: List<Product>, adsList: List<Int>): List<Any> {
 		val itemsList = mutableListOf<Any>()
-		itemsList.addAll(data.sortedBy { it.productId })
+		//itemsList.addAll(data.sortedBy { it.productId })
+		itemsList.addAll(data)
 		var currPos = 0
 		if (itemsList.size >= 4) {
 			adsList.forEach label@{ ad ->

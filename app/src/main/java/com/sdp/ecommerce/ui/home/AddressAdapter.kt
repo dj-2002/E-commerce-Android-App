@@ -96,7 +96,7 @@ class AddressAdapter(
 			lastCheckedAddress = addressTd
 			lastCheckedCard = card
 			selectedAddressPos = position
-			Log.d(TAG, "onCardClick: selected address = $addressTd")
+			Log.e(TAG, "onCardClick: selected address = $addressTd")
 		}
 	}
 }

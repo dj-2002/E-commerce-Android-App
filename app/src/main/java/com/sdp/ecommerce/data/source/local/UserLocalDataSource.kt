@@ -9,12 +9,14 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+private const val TAG = "UserLocalDataSource"
 class UserLocalDataSource internal constructor(
 	private val userDao: UserDao,
 	private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : UserDataSource {
 
 	override suspend fun addUser(userData: UserData) {
+		Log.e(TAG, "addUser: ")
 		withContext(ioDispatcher) {
 			userDao.clear()
 			userDao.insert(userData)
@@ -45,7 +47,7 @@ class UserLocalDataSource internal constructor(
 					return@withContext null
 				}
 			} catch (e: Exception) {
-				Log.d("UserLocalSource", "onGetUser: Error Occurred, $e")
+				Log.e("UserLocalSource", "onGetUser: Error Occurred, $e")
 				return@withContext null
 			}
 		}
@@ -62,7 +64,7 @@ class UserLocalDataSource internal constructor(
 				}
 
 			} catch (e: Exception) {
-				Log.d("UserLocalSource", "onGetOrders: Error Occurred, ${e.message}")
+				Log.e("UserLocalSource", "onGetOrders: Error Occurred, ${e.message}")
 				return@withContext Error(e)
 			}
 		}
@@ -79,7 +81,7 @@ class UserLocalDataSource internal constructor(
 				}
 
 			} catch (e: Exception) {
-				Log.d("UserLocalSource", "onGetAddress: Error Occurred, ${e.message}")
+				Log.e("UserLocalSource", "onGetAddress: Error Occurred, ${e.message}")
 				return@withContext Error(e)
 			}
 		}
@@ -96,7 +98,7 @@ class UserLocalDataSource internal constructor(
 				}
 
 			} catch (e: Exception) {
-				Log.d("UserLocalSource", "onGetLikes: Error Occurred, ${e.message}")
+				Log.e("UserLocalSource", "onGetLikes: Error Occurred, ${e.message}")
 				return@withContext Error(e)
 			}
 		}
@@ -114,7 +116,7 @@ class UserLocalDataSource internal constructor(
 					throw Exception("User Not Found")
 				}
 			} catch (e: Exception) {
-				Log.d("UserLocalSource", "onGetLikes: Error Occurred, ${e.message}")
+				Log.e("UserLocalSource", "onGetLikes: Error Occurred, ${e.message}")
 				throw e
 			}
 		}
@@ -132,7 +134,7 @@ class UserLocalDataSource internal constructor(
 					throw Exception("User Not Found")
 				}
 			} catch (e: Exception) {
-				Log.d("UserLocalSource", "onGetLikes: Error Occurred, ${e.message}")
+				Log.e("UserLocalSource", "onGetLikes: Error Occurred, ${e.message}")
 				throw e
 			}
 		}
@@ -150,7 +152,7 @@ class UserLocalDataSource internal constructor(
 					throw Exception("User Not Found")
 				}
 			} catch (e: Exception) {
-				Log.d("UserLocalSource", "onInsertCartItem: Error Occurred, ${e.message}")
+				Log.e("UserLocalSource", "onInsertCartItem: Error Occurred, ${e.message}")
 				throw e
 			}
 		}
@@ -171,7 +173,7 @@ class UserLocalDataSource internal constructor(
 					throw Exception("User Not Found")
 				}
 			} catch (e: Exception) {
-				Log.d("UserLocalSource", "onInsertCartItem: Error Occurred, ${e.message}")
+				Log.e("UserLocalSource", "onInsertCartItem: Error Occurred, ${e.message}")
 				throw e
 			}
 		}
@@ -192,7 +194,7 @@ class UserLocalDataSource internal constructor(
 					throw Exception("User Not Found")
 				}
 			} catch (e: Exception) {
-				Log.d("UserLocalSource", "onInsertCartItem: Error Occurred, ${e.message}")
+				Log.e("UserLocalSource", "onInsertCartItem: Error Occurred, ${e.message}")
 				throw e
 			}
 		}
@@ -224,7 +226,7 @@ class UserLocalDataSource internal constructor(
 					throw Exception("User Not Found")
 				}
 			} catch (e: Exception) {
-				Log.d("UserLocalSource", "onInsertCartItem: Error Occurred, ${e.message}")
+				Log.e("UserLocalSource", "onInsertCartItem: Error Occurred, ${e.message}")
 				throw e
 			}
 		}

@@ -66,6 +66,7 @@ class OtpViewModel(application: Application, private val uData: UserData) :
 			.setActivity(activity)                 // Activity (for callback binding)
 			.setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
 			.build()
+
 		PhoneAuthProvider.verifyPhoneNumber(options)
 
 		verificationInProgress = true
@@ -74,7 +75,7 @@ class OtpViewModel(application: Application, private val uData: UserData) :
 	private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
 		override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-			Log.d(TAG, "onVerificationCompleted:$credential")
+			Log.e(TAG, "onVerificationCompleted:$credential")
 			authRepository.signInWithPhoneAuthCredential(credential, isUserLoggedIn, application.applicationContext)
 		}
 
@@ -105,7 +106,7 @@ class OtpViewModel(application: Application, private val uData: UserData) :
 			val credential = PhoneAuthProvider.getCredential(verificationId, code)
 			authRepository.signInWithPhoneAuthCredential(credential, isUserLoggedIn, getApplication())
 		} catch (e: Exception) {
-			Log.d(TAG, "onVerifyWithCode: Exception Occurred: ${e.message}")
+			Log.e(TAG, "onVerifyWithCode: Exception Occurred: ${e.message}")
 		}
 	}
 }

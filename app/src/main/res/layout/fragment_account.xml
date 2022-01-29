@@ -18,6 +18,16 @@
         android:layout_height="match_parent"
         android:layout_below="@id/account_top_app_bar">
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/seller_mode_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/seller_mode"
+            android:checked="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
         <TextView
             android:id="@+id/account_profile_tv"
             android:layout_width="0dp"
@@ -37,7 +47,7 @@
             app:drawableTint="@color/blue_accent_300"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/seller_mode_switch" />
 
         <TextView
             android:id="@+id/account_orders_tv"

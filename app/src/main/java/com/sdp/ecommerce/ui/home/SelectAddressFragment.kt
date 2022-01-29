@@ -97,12 +97,12 @@ class SelectAddressFragment : Fragment() {
 			)
 			addressAdapter.onClickListener = object : AddressAdapter.OnClickListener {
 				override fun onEditClick(addressId: String) {
-					Log.d(TAG, "onEditAddress: initiated")
+					Log.e(TAG, "onEditAddress: initiated")
 					navigateToAddEditAddress(true, addressId)
 				}
 
 				override fun onDeleteClick(addressId: String) {
-					Log.d(TAG, "onDeleteAddress: initiated")
+					Log.e(TAG, "onDeleteAddress: initiated")
 					showDeleteDialog(addressId)
 				}
 			}
@@ -134,12 +134,12 @@ class SelectAddressFragment : Fragment() {
 	private fun navigateToPaymentFragment(addressId: String?) {
 		if (addressId != null) {
 			orderViewModel.setSelectedAddress(addressId)
-			Log.d(TAG, "navigate to Payment")
+			Log.e(TAG, "navigate to Payment")
 			binding.shipToErrorTextView.visibility = View.GONE
 			findNavController().navigate(R.id.action_selectAddressFragment_to_selectPaymentFragment)
 
 		} else {
-			Log.d(TAG, "error = select one address")
+			Log.e(TAG, "error = select one address")
 			binding.shipToErrorTextView.visibility = View.VISIBLE
 		}
 	}

@@ -32,6 +32,7 @@ import com.sdp.ecommerce.ui.AddItemErrors
 import com.sdp.ecommerce.ui.DotsIndicatorDecoration
 import com.sdp.ecommerce.viewModels.ProductViewModel
 
+private const val TAG = "ProductDetailsFragment"
 class ProductDetailsFragment : Fragment() {
 
 	inner class ProductViewModelFactory(
@@ -57,12 +58,16 @@ class ProductDetailsFragment : Fragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
+		Log.e(TAG, "onCreateView: ", )
 		binding = FragmentProductDetailsBinding.inflate(layoutInflater)
 		val productId = arguments?.getString("productId")
-
+		Log.e(TAG, "onCreateView: $productId", )
 		if (activity != null && productId != null) {
+			
 			val viewModelFactory = ProductViewModelFactory(productId, requireActivity().application)
 			viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(ProductViewModel::class.java)
+			viewModel.productId = productId
+			viewModel.getProductDetails()
 		}
 
 		if (viewModel.isSeller()) {
@@ -97,12 +102,26 @@ class ProductDetailsFragment : Fragment() {
 
 	override fun onResume() {
 		super.onResume()
+		Log.e(TAG, "onResume: ${viewModel.productData.value?.name} ", )
 		viewModel.setLike()
 		viewModel.checkIfInCart()
 		selectedSize = null
 		selectedColor = null
 	}
 
+
+	override fun onStop() {
+		Log.e(TAG, "onStop: ${viewModel.productData.value?.name}", )
+		viewModel.destroyOldData()
+		super.onStop()
+	}
+
+	override fun onDestroy() {
+		Log.e(TAG, "onDestroy: ${viewModel.productData.value?.name}", )
+
+		super.onDestroy()
+	}
+	
 	private fun setObservers() {
 		viewModel.dataStatus.observe(viewLifecycleOwner) {
 			when (it) {
@@ -187,6 +206,7 @@ class ProductDetailsFragment : Fragment() {
 		setShoeSizeButtons()
 		setShoeColorsButtons()
 		binding.proDetailsSpecificsText.text = viewModel.productData.value?.description ?: ""
+		Log.e(TAG, "setViews: ", )
 	}
 
 	private fun onAddToCart() {

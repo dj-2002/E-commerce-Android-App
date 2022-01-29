@@ -35,10 +35,10 @@ class AuthRemoteDataSource : UserDataSource {
 	override suspend fun addUser(userData: UserData) {
 		usersCollectionRef().add(userData.toHashMap())
 			.addOnSuccessListener {
-				Log.d(TAG, "Doc added")
+				Log.e(TAG, "Doc added")
 			}
 			.addOnFailureListener { e ->
-				Log.d(TAG, "firestore error occurred: $e")
+				Log.e(TAG, "firestore error occurred: $e")
 			}
 	}
 
