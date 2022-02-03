@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ShoppingApp" parent="Theme.AppCompat" />
 
-    <style name="Theme.AppCompat" parent="Theme.MaterialComponents.Light.NoActionBar">
+
+    <style name="Theme.ShoppingApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="android:colorPrimary">@color/blue_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -54,14 +54,10 @@
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.MyTheme.BottomSheetDialog</item>
         <item name="navigationViewStyle">@style/Widget.MyTheme.NavigationView</item>
         <item name="android:toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
+
+
     </style>
 
-    <!--    <style name="Theme.ShoppingApp.NoActionBar">-->
-    <!--        <item name="windowActionBar">false</item>-->
-    <!--        <item name="windowNoTitle">true</item>-->
-    <!--    </style>-->
 
-    <!--    <style name="Theme.ShoppingApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
 
-    <!--    <style name="Theme.ShoppingApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
 </resources>

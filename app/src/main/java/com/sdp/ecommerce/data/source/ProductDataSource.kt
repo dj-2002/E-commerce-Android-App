@@ -37,4 +37,5 @@ interface ProductDataSource {
 	suspend fun deleteProduct(productId: String)
 	suspend fun deleteAllProducts() {}
 	suspend fun insertMultipleProducts(data: List<Product>) {}
+    abstract suspend fun updateProductQuanity(productId: String, ownerId: String, quantity: Int)
 }

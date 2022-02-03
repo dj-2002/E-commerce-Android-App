@@ -53,6 +53,7 @@ class CartFragment : Fragment() {
 		binding.cartAppBar.topAppBar.title = getString(R.string.cart_fragment_label)
 		binding.cartEmptyTextView.visibility = View.GONE
 		binding.cartCheckOutBtn.setOnClickListener {
+
 			navigateToSelectAddress()
 		}
 		if (context != null) {

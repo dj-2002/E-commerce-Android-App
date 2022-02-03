@@ -1,17 +1,19 @@
 package com.sdp.ecommerce.ui.home
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.PopupWindow
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -19,9 +21,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sdp.ecommerce.R
 import com.sdp.ecommerce.data.Product
+import com.sdp.ecommerce.data.utils.PriceCategories
+import com.sdp.ecommerce.data.utils.PriceCategoriesInt
 import com.sdp.ecommerce.data.utils.ProductCategories
 import com.sdp.ecommerce.data.utils.StoreDataStatus
 import com.sdp.ecommerce.databinding.FragmentHomeBinding
@@ -154,7 +161,8 @@ class HomeFragment : Fragment() {
 				val extraFilters = arrayOf("All", "None")
 				val categoryList = ProductCategories.plus(extraFilters)
 				val checkedItem = categoryList.indexOf(viewModel.filterCategory.value)
-				showDialogWithItems(categoryList, checkedItem, true)
+				//showDialogWithItems(categoryList, checkedItem, true)
+				showPriceFilterDialog()
 				true
 			}
 			R.id.home_favorites -> {
@@ -164,6 +172,67 @@ class HomeFragment : Fragment() {
 			}
 			else -> false
 		}
+	}
+
+	private fun showPriceFilterDialog() {
+
+		viewModel.priceFilter = Pair(0, Int.MAX_VALUE)
+		viewModel.catageroyFilter ="All"
+		val window = PopupWindow(requireContext())
+
+		val v = layoutInflater.inflate(R.layout.product_filter_layout,null,false)
+		window.setContentView(v)
+		window.apply {
+
+			setBackgroundDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.plain_white))
+			width=WindowManager.LayoutParams.MATCH_PARENT
+			height=WindowManager.LayoutParams.WRAP_CONTENT
+		}
+		val priceChipGroup = v.findViewById<ChipGroup>(R.id.filter_chip_price)
+		val catageroyChipGroup = v.findViewById<ChipGroup>(R.id.filter_chip_catageroy)
+		val cancelButton = v.findViewById<Button>(R.id.filterCancel)
+		val applyButton = v.findViewById<Button>(R.id.filterApply)
+
+		cancelButton.setOnClickListener {
+			window.dismiss()
+		}
+		applyButton.setOnClickListener {
+
+			viewModel.applyFilter()
+			window.dismiss()
+		}
+
+		catageroyChipGroup.apply {
+			ProductCategories.forEach {
+				val chip = Chip(requireContext())
+				chip.text=it
+				chip.isCheckable=true
+				chip.setOnClickListener {
+					Log.e(TAG, "showPriceFilterDialog: ${chip.text}",)
+					viewModel.catageroyFilter = chip.text.toString()
+
+				}
+				this.addView(chip)
+			}
+		}
+		priceChipGroup.apply {
+			PriceCategories.forEach {
+				val chip = Chip(requireContext())
+				chip.text=it
+				chip.isCheckable=true
+				chip.setOnClickListener {
+					Log.e(TAG, "showPriceFilterDialog: ${chip.text}",)
+					val pair = PriceCategoriesInt.get(chip.text)
+					pair?.let {
+						viewModel.priceFilter = it
+					}
+					}
+				this.addView(chip)
+			}
+			}
+
+		//window.showAsDropDown(binding.root.findViewById(R.id.home_filter))
+		window.showAtLocation(binding.root,Gravity.BOTTOM,0,0)
 	}
 
 	private fun setHomeTopAppBar() {

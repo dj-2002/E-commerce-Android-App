@@ -14,6 +14,7 @@
         layout="@layout/layout_circular_loader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:layout_below="@id/add_pro_app_bar"
         android:layout_gravity="center" />
 
@@ -194,6 +195,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pro_details_specifications_label"
                 tools:text="TextViewveoihj" />
+
+            <TextView
+                android:id="@+id/outofstock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OUT OF STOCK"
+                android:visibility="invisible"
+                android:textColor="@color/holo_red_light"
+                app:layout_constraintBottom_toBottomOf="@+id/pro_details_price_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/pro_details_price_tv"
+                app:layout_constraintTop_toTopOf="@+id/pro_details_price_tv" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

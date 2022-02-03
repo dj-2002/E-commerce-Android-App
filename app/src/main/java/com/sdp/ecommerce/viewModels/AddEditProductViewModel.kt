@@ -93,6 +93,8 @@ class AddEditProductViewModel(application: Application) : AndroidViewModel(appli
 		name: String,
 		price: Double?,
 		mrp: Double?,
+		quantity : Int,
+		catageroy:String,
 		desc: String,
 		sizes: List<Int>,
 		colors: List<String>,
@@ -113,7 +115,8 @@ class AddEditProductViewModel(application: Application) : AndroidViewModel(appli
 						name.trim(),
 						currentUser!!,
 						desc.trim(),
-						_selectedCategory.value!!,
+						quantity,
+						catageroy,
 						price,
 						mrp,
 						sizes,
@@ -200,5 +203,14 @@ class AddEditProductViewModel(application: Application) : AndroidViewModel(appli
 			}
 		}
 	}
+
+
+
+    suspend fun reduceQuantity(productId: String, ownerId: String, quantity: Int) {
+		Log.e(TAG, "reduceQuantity: $productId", )
+		productsRepository.updateProductQuantity(productId,ownerId,quantity)
+    }
+
+
 
 }

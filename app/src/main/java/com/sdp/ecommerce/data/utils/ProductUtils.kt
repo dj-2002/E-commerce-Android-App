@@ -23,4 +23,6 @@ val ShoeColors = mapOf(
 	"magenta" to "#FF00FF"
 )
 
-val ProductCategories = arrayOf("Shoes", "Slippers")
+val ProductCategories = arrayOf("Mobiles, Computers", "Tv , Appliances , Electronics","Men's Fashion","Women's Fashion","Home,Kitchen,Pets","Beauty,Health,Grocery","Sports,Fitness,Bags,Luggage","Toys,Baby Products,Kids Fashion","Car , MotorBike ,Industrial","Books","Other")
+val PriceCategories = arrayOf("500 - 1000","1000-2000","2000-5000")
+val PriceCategoriesInt = hashMapOf<String,Pair<Int,Int>>(Pair("500 - 1000",Pair(500,1000)),Pair("1000 - 2000",Pair(1000,2000)),Pair("2000 - 5000",Pair(2000,5000)))

@@ -2,10 +2,7 @@ package com.sdp.ecommerce.viewModels
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.sdp.ecommerce.ShoppingApplication
 import com.sdp.ecommerce.data.Product
 import com.sdp.ecommerce.data.Result.Error
@@ -284,6 +281,7 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
 			Log.d(TAG, "orFinalizeOrder: Error, data null or empty")
 			_orderStatus.value = StoreDataStatus.ERROR
 		}
+
 	}
 
 	private fun insertOrder() {
@@ -296,6 +294,7 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
 				val res = deferredRes.await()
 				if (res is Success) {
 					Log.d(TAG, "onInsertOrder: Success")
+
 					_cartItems.value = emptyList()
 					_cartProducts.value = emptyList()
 					_priceList.value = emptyMap()

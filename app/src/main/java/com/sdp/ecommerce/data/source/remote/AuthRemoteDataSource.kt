@@ -13,6 +13,7 @@ import com.sdp.ecommerce.data.source.UserDataSource
 import com.sdp.ecommerce.data.utils.EmailMobileData
 import com.sdp.ecommerce.data.utils.OrderStatus
 import kotlinx.coroutines.tasks.await
+import kotlin.math.log
 
 class AuthRemoteDataSource : UserDataSource {
 	private val firebaseDb: FirebaseFirestore = Firebase.firestore
@@ -20,7 +21,7 @@ class AuthRemoteDataSource : UserDataSource {
 	private fun usersCollectionRef() = firebaseDb.collection(USERS_COLLECTION)
 	private fun allEmailsMobilesRef() =
 		firebaseDb.collection(USERS_COLLECTION).document(EMAIL_MOBILE_DOC)
-
+	private fun allMessageRef() = firebaseDb.collection(ORDER_MESSAGE)
 
 	override suspend fun getUserById(userId: String): Result<UserData?> {
 		val resRef = usersCollectionRef().whereEqualTo(USERS_ID_FIELD, userId).get().await()
@@ -54,6 +55,12 @@ class AuthRemoteDataSource : UserDataSource {
 		} else {
 			Error(Exception("User Not Found!"))
 		}
+	}
+
+	override suspend fun notifySeller(sellerId:String, productId: String)
+	{
+
+
 	}
 
 	override suspend fun getAddressesByUserId(userId: String): Result<List<UserData.Address>?> {
@@ -295,5 +302,6 @@ class AuthRemoteDataSource : UserDataSource {
 		private const val EMAIL_MOBILE_EMAIL_FIELD = "emails"
 		private const val EMAIL_MOBILE_MOB_FIELD = "mobiles"
 		private const val TAG = "AuthRemoteDataSource"
+		private const val ORDER_MESSAGE = "messages"
 	}
 }

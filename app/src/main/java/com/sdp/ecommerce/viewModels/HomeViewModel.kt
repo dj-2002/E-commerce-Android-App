@@ -15,6 +15,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.time.Month
 import java.util.*
+import kotlin.collections.HashMap
 
 private const val TAG = "HomeViewModel"
 
@@ -67,6 +68,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
 	private val _userData = MutableLiveData<UserData?>()
 	val userData: LiveData<UserData?> get() = _userData
+
+	var catageroyFilter:String = "All"
+	var priceFilter = Pair<Int,Int>(0,999999)
 
 	init {
 		viewModelScope.launch {
@@ -255,7 +259,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
 	fun signOut() {
 		viewModelScope.launch {
-			val deferredRes = async { authRepository.signOut() }
+			val deferredRes = async { authRepository.signOut()
+
+			}
 			deferredRes.await()
 		}
 	}
@@ -382,5 +388,16 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 				_userData.value = null
 			}
 		}
+	}
+
+	fun applyFilter() {
+
+		filterProducts(catageroyFilter)
+		_products.value = _products.value?.filter {
+			if(it.price>= priceFilter.first && it.price<=priceFilter.second)
+				return@filter true
+			false
+		}
+
 	}
 }

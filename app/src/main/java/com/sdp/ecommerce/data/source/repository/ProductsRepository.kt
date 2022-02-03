@@ -154,6 +154,10 @@ class ProductsRepository(
 		}
 	}
 
+	override suspend fun updateProductQuantity(productId: String, ownerId: String, quantity: Int) {
+		productsRemoteSource.updateProductQuanity(productId,ownerId,quantity)
+	}
+
 	private suspend fun updateProductsFromRemoteSource(): StoreDataStatus? {
 		var res: StoreDataStatus? = null
 		try {

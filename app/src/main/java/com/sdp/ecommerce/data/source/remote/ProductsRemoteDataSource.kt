@@ -90,6 +90,13 @@ class ProductsRemoteDataSource : ProductDataSource {
 		}
 	}
 
+	override suspend fun updateProductQuanity(productId: String, ownerId: String, quantity: Int) {
+		val resRef = productsCollectionRef().whereEqualTo(PRODUCT_ID_FIELD, productId).get().await()
+		val product = resRef.toObjects(Product::class.java)
+		product[0].quantity-=quantity
+		updateProduct(product[0])
+	}
+
 	override suspend fun uploadImage(uri: Uri, fileName: String): Uri? {
 		val imgRef = storageRef().child("$SHOES_STORAGE_PATH/$fileName")
 		val uploadTask = imgRef.putFile(uri)

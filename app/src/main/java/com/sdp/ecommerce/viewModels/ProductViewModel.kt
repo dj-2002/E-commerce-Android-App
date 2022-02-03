@@ -172,4 +172,6 @@ class ProductViewModel( var productId: String, application: Application) :
 	fun destroyOldData() {
 
 	}
+
+
 }

@@ -9,6 +9,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
@@ -18,14 +20,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.sdp.ecommerce.R
-import com.sdp.ecommerce.data.utils.AddProductErrors
-import com.sdp.ecommerce.data.utils.ShoeColors
-import com.sdp.ecommerce.data.utils.ShoeSizes
-import com.sdp.ecommerce.data.utils.StoreDataStatus
+import com.sdp.ecommerce.data.utils.*
 import com.sdp.ecommerce.databinding.FragmentAddEditProductBinding
 import com.sdp.ecommerce.ui.AddProductViewErrors
 import com.sdp.ecommerce.ui.MyOnFocusChangeListener
 import com.sdp.ecommerce.viewModels.AddEditProductViewModel
+import java.util.*
 import kotlin.properties.Delegates
 
 private const val TAG = "AddProductFragment"
@@ -73,6 +73,7 @@ class AddEditProductFragment : Fragment() {
 		setViews()
 
 		setObservers()
+		setCatageorySelectTextField()
 		return binding.root
 	}
 
@@ -147,6 +148,7 @@ class AddEditProductFragment : Fragment() {
 			binding.proPriceEditText.setText(product.price.toString())
 			binding.proMrpEditText.setText(product.mrp.toString())
 			binding.proDescEditText.setText(product.description)
+			binding.proQuantityEditText.setText(product.quantity.toString())
 
 			imgList = product.images.map { it.toUri() } as MutableList<Uri>
 			val adapter = AddProductImagesAdapter(requireContext(), imgList)
@@ -159,7 +161,15 @@ class AddEditProductFragment : Fragment() {
 		}
 
 	}
-
+	private fun setCatageorySelectTextField() {
+		val countries = ProductCategories
+		val defaultCountry = ProductCategories[0]
+		val countryAdapter = ArrayAdapter(requireContext(), R.layout.country_list_item, countries)
+		(binding.productCatageroyEditText as? AutoCompleteTextView)?.let {
+			it.setText(defaultCountry, false)
+			it.setAdapter(countryAdapter)
+		}
+	}
 	private fun setViews() {
 		Log.d(TAG, "set views")
 
@@ -205,13 +215,15 @@ class AddEditProductFragment : Fragment() {
 		val name = binding.proNameEditText.text.toString()
 		val price = binding.proPriceEditText.text.toString().toDoubleOrNull()
 		val mrp = binding.proMrpEditText.text.toString().toDoubleOrNull()
+		val quantity = binding.proQuantityEditText.text.toString().toInt()
 		val desc = binding.proDescEditText.text.toString()
+		val catageroy = binding.productCatageroyEditText.text.toString()
 		Log.d(
 			TAG,
 			"onAddProduct: Add product initiated, $name, $price, $mrp, $desc, $sizeList, $colorsList, $imgList"
 		)
 		viewModel.submitProduct(
-			name, price, mrp, desc, sizeList.toList(), colorsList.toList(), imgList
+			name, price, mrp,quantity, catageroy,desc, sizeList.toList(), colorsList.toList(), imgList
 		)
 	}
 

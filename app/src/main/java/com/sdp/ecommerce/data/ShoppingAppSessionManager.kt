@@ -3,6 +3,11 @@ package com.sdp.ecommerce.data
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.sdp.ecommerce.viewModels.HomeViewModel
+import com.sdp.ecommerce.viewModels.OrderViewModel
 
 private const val TAG = "ShoppingAppSessionManag"
 class ShoppingAppSessionManager(context: Context) {
@@ -58,6 +63,8 @@ class ShoppingAppSessionManager(context: Context) {
 		editor.putBoolean(KEY_IS_SELLER, !isUserSeller())
 		editor.commit()
 	}
+
+
 
 	companion object {
 		private const val IS_LOGIN = "isLoggedIn"

@@ -8,12 +8,19 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sdp.ecommerce.R
+import com.sdp.ecommerce.data.ShoppingAppSessionManager
 import com.sdp.ecommerce.data.utils.StoreDataStatus
 import com.sdp.ecommerce.databinding.FragmentSelectAddressBinding
+import com.sdp.ecommerce.viewModels.AddEditProductViewModel
 import com.sdp.ecommerce.viewModels.OrderViewModel
+import com.sdp.ecommerce.viewModels.ProductViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private const val TAG = "ShipToFragment"
 
@@ -22,14 +29,14 @@ class SelectAddressFragment : Fragment() {
 	private lateinit var binding: FragmentSelectAddressBinding
 	private val orderViewModel: OrderViewModel by activityViewModels()
 	private lateinit var addressAdapter: AddressAdapter
-
+	private lateinit var sessionManager: ShoppingAppSessionManager
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
 		binding = FragmentSelectAddressBinding.inflate(layoutInflater)
-
+		sessionManager = ShoppingAppSessionManager(requireContext())
 		setViews()
 		setObservers()
 
@@ -111,6 +118,15 @@ class SelectAddressFragment : Fragment() {
 		}
 
 		binding.shipToNextBtn.setOnClickListener {
+			// here
+			val productViewModel = ViewModelProvider(requireActivity()).get(AddEditProductViewModel::class.java)
+			orderViewModel.cartItems.value?.forEach {
+				lifecycleScope.launch(Dispatchers.IO) {
+					productViewModel.reduceQuantity(it.productId, it.ownerId, it.quantity)
+				}
+			}
+
+
 			navigateToPaymentFragment(addressAdapter.lastCheckedAddress)
 		}
 	}

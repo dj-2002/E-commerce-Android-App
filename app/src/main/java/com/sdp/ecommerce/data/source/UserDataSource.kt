@@ -53,4 +53,5 @@ interface UserDataSource {
 	suspend fun getAddressesByUserId(userId: String): Result<List<UserData.Address>?>
 
 	suspend fun getLikesByUserId(userId: String): Result<List<String>?>
+    suspend fun notifySeller(sellerId: String, productId: String)
 }

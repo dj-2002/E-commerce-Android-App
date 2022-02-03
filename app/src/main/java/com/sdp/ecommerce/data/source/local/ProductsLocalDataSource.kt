@@ -82,6 +82,10 @@ class ProductsLocalDataSource internal constructor(
 		productsDao.insertListOfProducts(data)
 	}
 
+	override suspend fun updateProductQuanity(productId: String, ownerId: String, quantity: Int) {
+
+	}
+
 	override suspend fun deleteProduct(productId: String): Unit = withContext(ioDispatcher) {
 		productsDao.deleteProductById(productId)
 	}

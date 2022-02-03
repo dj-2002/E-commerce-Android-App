@@ -16,6 +16,7 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -199,6 +200,12 @@ class ProductDetailsFragment : Fragment() {
 			}
 		}
 		binding.proDetailsRatingBar.rating = (viewModel.productData.value?.rating ?: 0.0).toFloat()
+		val quantity = viewModel.productData.value?.quantity?: 0
+		if(quantity <= 0) {
+			binding.outofstock.visibility = View.VISIBLE
+			binding.proDetailsAddCartBtn.visibility = View.GONE
+
+		}
 		binding.proDetailsPriceTv.text = resources.getString(
 			R.string.pro_details_price_value,
 			viewModel.productData.value?.price.toString()

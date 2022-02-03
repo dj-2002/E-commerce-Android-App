@@ -1,14 +1,29 @@
 package com.sdp.ecommerce.ui.home
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.sdp.ecommerce.R
 import com.sdp.ecommerce.data.ShoppingAppSessionManager
+import com.sdp.ecommerce.data.UserData
+import com.sdp.ecommerce.data.source.remote.AuthRemoteDataSource
 import com.sdp.ecommerce.databinding.ActivityMainBinding
+import com.sdp.ecommerce.ui.LaunchActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private const val TAG = "MainActivity"
 
@@ -24,7 +39,17 @@ class MainActivity : AppCompatActivity() {
 
 		// Bottom Navigation
 		setUpNav()
+
+		lifecycleScope.launch(Dispatchers.IO){
+			Log.e(TAG, "onCreate: notify seller ", )
+			val authRemoteDataSource = AuthRemoteDataSource()
+			authRemoteDataSource.notifySeller(UserData().userId,"dsafdsafasdfdsfafdd");
+		}
+
 	}
+
+
+
 
 	private fun setUpNav() {
 		val navFragment =

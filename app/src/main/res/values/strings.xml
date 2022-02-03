@@ -166,5 +166,7 @@
     <string name="status_dialog_title">Select Status of Product</string>
     <string name="price_card_status_label_string">Order Status</string>
     <string name="seller_mode">Seller Mode</string>
+    <string name="add_pro_quantity_label_text">Quantity</string>
+    <string name="add_product_catageroy_label_text">Catageroy</string>
 
 </resources>

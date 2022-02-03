@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.sdp.ecommerce.R
 import com.sdp.ecommerce.data.utils.StoreDataStatus
 import com.sdp.ecommerce.databinding.FragmentOrderSuccessBinding
+import com.sdp.ecommerce.viewModels.AddEditProductViewModel
 import com.sdp.ecommerce.viewModels.OrderViewModel
 
 class OrderSuccessFragment : Fragment() {
@@ -18,24 +20,24 @@ class OrderSuccessFragment : Fragment() {
 	private lateinit var binding: FragmentOrderSuccessBinding
 	private val orderViewModel: OrderViewModel by activityViewModels()
 
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
 		binding = FragmentOrderSuccessBinding.inflate(layoutInflater)
-
 		binding.loaderLayout.loaderCard.visibility = View.VISIBLE
 		binding.loaderLayout.loadingMessage.text = getString(R.string.process_order_msg)
 		binding.loaderLayout.circularLoader.showAnimationBehavior
 		binding.orderConstraintGroup.visibility = View.GONE
 		setObservers()
+
 		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-
 		binding.backToHomeBtn.setOnClickListener {
 			findNavController().navigate(R.id.action_orderSuccessFragment_to_homeFragment)
 		}
@@ -64,7 +66,6 @@ class OrderSuccessFragment : Fragment() {
 			binding.redirectHomeTimerTv.text =
 				getString(R.string.redirect_home_timer_text, sec.toString())
 		}
-
 		override fun onFinish() {
 			findNavController().navigate(R.id.action_orderSuccessFragment_to_homeFragment)
 		}
