@@ -32,13 +32,13 @@ class OrderSuccessFragment : Fragment() {
 		binding.loaderLayout.circularLoader.showAnimationBehavior
 		binding.orderConstraintGroup.visibility = View.GONE
 		setObservers()
-
 		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		binding.backToHomeBtn.setOnClickListener {
+			countDownTimer.cancel()
 			findNavController().navigate(R.id.action_orderSuccessFragment_to_homeFragment)
 		}
 	}

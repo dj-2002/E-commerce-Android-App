@@ -30,7 +30,6 @@ class AccountFragment : Fragment() {
 		savedInstanceState: Bundle?
 	): View? {
 		binding = FragmentAccountBinding.inflate(layoutInflater)
-
 		setViews()
 		return binding.root
 	}
